@@ -46,14 +46,17 @@ export const generateMockData = (): Player[] => {
 					.padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
 
 				const isWin = Math.random() > 0.3 + rank / 30;
+				const result: "win" | "loss" = isWin ? "win" : "loss";
+
 				return {
 					id: i + 1,
 					date: dateStr,
-					result: isWin ? "win" : "loss",
+					result,
 					score: isWin
 						? Math.floor(300 + Math.random() * 200)
 						: Math.floor(150 + Math.random() * 150),
 				};
+
 			});
 
 		const performanceData = Array(7)
@@ -258,15 +261,19 @@ export const updatePlayerStats = (player: Player): Player => {
 	const scoreChange = Math.floor(Math.random() * 20) - 5;
 	const winOrLoss = Math.random() > 0.7;
 
-	const updatedPlayer = {
+	const updatedPlayer: Player = {
 		...player,
+		stats: { ...player.stats },
+		achievements: { ...player.achievements },
+		achievementCategories: player.achievementCategories.map((c) => ({ ...c })),
 		performanceData: player.performanceData.map((d) => ({ ...d })),
 		accuracyData: player.accuracyData.map((d) => ({ ...d })),
 		recentGames: player.recentGames.map((g) => ({ ...g })),
-		achievements: Array.isArray((player as any).achievements)
-			? (player as any).achievements.map((a: any) => ({ ...a }))
-			: (player as any).achievements,
+		// keep these as-is unless your types require deeper nesting
+		gameModeData: player.gameModeData.map((m) => ({ ...m })),
+		recentAchievements: player.recentAchievements.map((a) => ({ ...a })),
 	};
+
 
 	updatedPlayer.score = Math.max(5000, player.score + scoreChange);
 
@@ -311,7 +318,7 @@ export const updatePlayerStats = (player: Player): Player => {
 		const newGame = {
 			id: player.recentGames.length + 1,
 			date: dateStr,
-			result: winOrLoss ? "win" : "loss",
+			result: (winOrLoss ? "win" : "loss") as "win" | "loss",
 			score: winOrLoss
 				? Math.floor(300 + Math.random() * 200)
 				: Math.floor(150 + Math.random() * 150),
