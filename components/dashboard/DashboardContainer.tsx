@@ -12,7 +12,7 @@ import { generateNotification, initialMockPlayers } from "@/lib/mockData";
 import { useNotifications } from "@/hooks/useNotifications";
 import { usePlayerUpdates } from "@/hooks/usePlayerUpdates";
 import { useServerStatus } from "@/hooks/useServerStatus";
-import type { StatCategory } from "@/lib/types";
+import type { StatCategory, TimeRange } from "@/lib/types";
 
 export default function DashboardContainer() {
 	// UI state
@@ -20,7 +20,7 @@ export default function DashboardContainer() {
 	const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 	const [sortBy, setSortBy] = useState<"rank" | "score" | "winRate">("rank");
 	const [searchQuery, setSearchQuery] = useState("");
-	const [timeRange, setTimeRange] = useState("7d");
+	const [timeRange, setTimeRange] = useState<TimeRange>("7d");
 	const [statCategory, setStatCategory] = useState<StatCategory>("overview");
 	// Realtime simulation hooks
 	const { players, selectedPlayer, setSelectedPlayer, prevPlayersRef } =
